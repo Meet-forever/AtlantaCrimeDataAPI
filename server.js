@@ -49,7 +49,7 @@ main().catch(console.error)
 
 //await listDB(client); to call the function
 /**
- * It prints all the available database
+ * It prints all the available
  * @param {mongodb.MongoClient} client to connect and use database and collections. 
  */
 async function listDB(client){
