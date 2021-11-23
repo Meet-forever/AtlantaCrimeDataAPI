@@ -20,7 +20,7 @@ app.use(express.json())
 async function main(){
     
     uri = process.env.URI;
-    const client = new mongodb.MongoClient(uri);
+    const client = new mongodb.MongoClient(uri,{useNewUrlParser: true, useUnifiedTopology: true});
     try{
         await client.connect();
         const db = client.db(`CrimeDataAPI`);
@@ -37,7 +37,6 @@ async function main(){
         app.get('/download/csv', (req, res)=>{
             res.redirect('https://www.atlantapd.org/home/showpublisheddocument/4470/637728271158000000');
         })
-
         
     }
     catch(e){
