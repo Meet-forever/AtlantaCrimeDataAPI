@@ -5,6 +5,7 @@ const cors = require('cors');
 const PORT = process.env.PORT || 8000;
 const allData = require('./Routers/AllData')
 const top = require('./Routers/Top')
+const path = require('path')
 
 const app = express()
 
@@ -24,18 +25,30 @@ async function main(){
     try{
         await client.connect();
         const db = client.db(`CrimeDataAPI`);
-        
+
+        // To use ejs
+        app.set('views', path.join(__dirname, 'views'));
+        app.set('view engine', 'ejs');
+       
+        // Static file setup for css and images
+        app.use(express.static(__dirname+'/public'))
+
+        // Routes
         app.use('/all', allData({db}));
         app.use('/top', top({db}));
         
         app.get('/', async(req, res)=>{
             const col = db.collection('rawCrimeData');
             // const result = await col.find().sort({occur_date: -1}).toArray();
-            res.send("Hello! Welcome to API");
+            res.render('index');
         })
 
         app.get('/download/csv', (req, res)=>{
             res.redirect('https://www.atlantapd.org/home/showpublisheddocument/4470/637728271158000000');
+        })
+
+        app.get('*', (req, res)=>{
+            res.render('404');
         })
         
     }

@@ -36,6 +36,6 @@ class DB:
 
 
 
-def startDB(database: Database, dataBaseName:str, collectionName:str)->Collection | None:
+def startDB(database, dataBaseName:str, collectionName:str):
     if database.connect() and database.set_dataBase(dataBaseName) and database.set_collection(collectionName):
         return database.get_collection()
