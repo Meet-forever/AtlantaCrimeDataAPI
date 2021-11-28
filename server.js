@@ -3,8 +3,8 @@ const express = require('express');
 const mongodb = require('mongodb');
 const cors = require('cors');
 const PORT = process.env.PORT || 8000;
-const allData = require('./Routers/AllData')
-const top = require('./Routers/Top')
+const allData = require('./Routes/AllData')
+const top = require('./Routes/Top')
 const path = require('path')
 
 const app = express()
@@ -38,7 +38,7 @@ async function main(){
         app.use('/top', top({db}));
         
         app.get('/', async(req, res)=>{
-            const col = db.collection('rawCrimeData');
+            // const col = db.collection('rawCrimeData').aggregate({$project:{ _id: 0}});
             // const result = await col.find().sort({occur_date: -1}).toArray();
             res.render('index');
         })

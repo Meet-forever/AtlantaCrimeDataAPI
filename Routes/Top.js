@@ -6,7 +6,7 @@ const top = (props) =>{
     const db = props.db
 
     router.get('/nbhds', async(req, res)=>{
-        const result = await db.collection('topCrimeNeighborhoods').find().toArray();
+        const result = await db.collection('topCrimeNeighborhoods').find({}, {projection: {_id: 0}}).toArray();
         res.send(result);
     })
 
@@ -17,7 +17,7 @@ const top = (props) =>{
             const col = db.collection('topCrimeNeighborhoods');
             const size = await col.estimatedDocumentCount()
             if (prm <=size){
-                const result = await col.find({}).limit(prm).toArray();
+                const result = await col.find({}, {projection: {_id: 0}}).limit(prm).toArray();
                 res.send(result)
             }
             else res.status(400).send([-1]);

@@ -3,7 +3,7 @@ from pandas.core.frame import DataFrame
 from pymongo.database import Database
 import dotenv
 import pandas as pd
-import os
+# import os
 
 env = dotenv.dotenv_values()
 
@@ -36,9 +36,10 @@ def rawCrimeData(df:DataFrame, col: Collection)->None:
 
 def crimeByNeighborhood(df:DataFrame, DB: Database) -> None:
     topCounties = []
+    index = 0
     for i, k in df['neighborhood'].value_counts().to_dict().items():
-        topCounties.append({i: k})
-    
+        topCounties.append({str(index): [i, k]})
+        index +=1
     
     DB.set_collection('topCrimeNeighborhoods')
     temp_col = DB.get_collection()
@@ -71,8 +72,17 @@ def topIncidentDates(df:DataFrame, DB:Database)->None:
 # col2.insert_one(obj)
 
 
-# CSV_path = os.path.join(os.path.join(os.path.dirname(__file__), "Data"),os.listdir(os.path.join(os.path.dirname(__file__), "Data"))[0])
+# CSV_path = os.path.join(os.path.dirname(__file__).replace('modules', 'Data'),os.listdir(os.path.dirname(__file__).replace('modules', 'Data'))[0])
 # df = pd.read_csv(CSV_path)
+# def test(df):
+#     topCounties = []
+#     for i, k in df['neighborhood'].value_counts().to_dict().items():
+#         topCounties.append([i, k])
+
+#     print(topCounties)
+
+# test(df)
+
 # 1) Clean Data
 # 2) Paste it into validation
 # df = clean(df)

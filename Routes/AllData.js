@@ -7,7 +7,8 @@ const allData = (props) =>{
 
     router.get('/rawdata', async (req, res) =>{
         const col = db.collection('rawCrimeData');
-        const result = await col.find().toArray();
+        // const result = await col.find({}, {projection: {_id: 0}}).toArray();
+        const result = await col.find({}).project({_id:0}).toArray();
         res.send(result);
     })
 
