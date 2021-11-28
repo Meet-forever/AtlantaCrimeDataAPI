@@ -33,20 +33,21 @@ async function main(){
         // Static file setup for css and images
         app.use(express.static(__dirname+'/public'))
 
-        // Routes
-        app.use('/all', allData({db}));
-        app.use('/top', top({db}));
         
         app.get('/', async(req, res)=>{
             // const col = db.collection('rawCrimeData').aggregate({$project:{ _id: 0}});
             // const result = await col.find().sort({occur_date: -1}).toArray();
             res.render('index');
         })
-
+        
         app.get('/download/csv', (req, res)=>{
             res.redirect('https://www.atlantapd.org/home/showpublisheddocument/4470/637728271158000000');
         })
-
+        
+        // Routes
+        app.use('/all', allData({db}));
+        app.use('/top', top({db}));
+        
         app.get('*', (req, res)=>{
             res.render('404');
         })
