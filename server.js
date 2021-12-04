@@ -41,7 +41,7 @@ async function main(){
         })
         
         app.get('/download/csv', (req, res)=>{
-            res.redirect('https://www.atlantapd.org/home/showpublisheddocument/4470/637728271158000000');
+            res.redirect('https://www.atlantapd.org/home/showpublisheddocument/');
         })
         
         // Routes
