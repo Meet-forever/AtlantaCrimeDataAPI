@@ -6,6 +6,7 @@ const PORT = process.env.PORT || 8000;
 const allData = require('./Routes/AllData')
 const top = require('./Routes/Top')
 const path = require('path')
+const fs = require('fs');
 
 const app = express()
 
@@ -41,7 +42,22 @@ async function main(){
         })
         
         app.get('/download/csv', (req, res)=>{
-            res.redirect('https://www.atlantapd.org/home/showpublisheddocument/');
+            let datafilepath = path_joinner(['ScriptPy', 'Data'])
+            fs.readdir(datafilepath, (err, files) => {
+                if(files){
+                    let abspath = path.join(datafilepath, files[0]);   
+                    fs.readFile(abspath, (err, data) => {
+                        if (data) {
+                            res.header('Content-Type', 'text/csv');
+                            res.send(data);
+                        }
+                        else{
+                            res.status(500).send({'Error' : 'Failed to read the file.'});
+                        }
+                    })
+                }
+                else res.status(500).send({'Error' : 'Failed to get the file.'})
+            })
         })
         
         // Routes
@@ -51,6 +67,15 @@ async function main(){
         app.get('*', (req, res)=>{
             res.render('404');
         })
+
+        //Helper function
+        const path_joinner = (arr) =>{
+            let abspath = __dirname
+            arr.forEach( i =>{
+                abspath = path.join(abspath, i); 
+            })
+            return abspath;
+        }
         
     }
     catch(e){
