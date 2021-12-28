@@ -4,7 +4,13 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>404 | Page Not Found</title>
+    <title>
+            <% if(typeof error_no != 'undefined'){ %> 
+                400 | Bad Request
+                <% } else { %>
+                404 | Page Not Found
+            <% } %>
+    </title>
     <link rel="stylesheet" href="/css/main.css"/>
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;500&display=swap" rel="stylesheet">
@@ -15,7 +21,13 @@
 </head>
 <body>
     <div class="err-contain">
-        <h1 id="err"> 404 | Page Not Found</h1>
+        <h1 id="err"> 
+            <% if(typeof error_no != 'undefined'){ %> 
+            400 | Bad Request
+            <% } else { %>
+            404 | Page Not Found
+            <% } %>
+        </h1>
         <br/>
         <h2>Hooman, You Lost?</h2>
         <p>I can smell this page works: <a href="http://atlantacrimedataapi-env.eba-9qxqwmqj.us-east-2.elasticbeanstalk.com/">click me</a></p>

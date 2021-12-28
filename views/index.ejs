@@ -16,123 +16,141 @@
 </head>
 <body>
     <div class="contain">
-    <h1>Hello!</h1>
-    <h1>Welcome to the Unofficial Atlanta Crime Data API</h1>
-    <br/>
-    <p>The data has been taken from the <a href="https://www.atlantapd.org/i-want-to/crime-data-downloads">Atlanta Police Department's</a> website.</p>
-    <p>Visit their website to see more intresting data.</p>
-    <br/>
-    <p class="code-p"><code class="code-block">Base url</code> :  http://atlantacrimedataapi-env.eba-9qxqwmqj.us-east-2.elasticbeanstalk.com/</p>
-    <br/>
-    <h1>General</h1>
-    <p>To download <a href="http://atlantacrimedataapi-env.eba-9qxqwmqj.us-east-2.elasticbeanstalk.com/download/csv">csv</a> file.</p>
-    <div class="detail-wrapper">
-        <code>
-            <b><code class="method">GET</code></b> /download/csv
-            <br/>
-            <b>Example: </b> http://atlantacrimedataapi-env.eba-9qxqwmqj.us-east-2.elasticbeanstalk.com/download/csv
-        </code>
-    </div>
-    <br/> <br/>
-    <h1>All</h1>
-    <p>To request all raw json data.</p>
-    <div class="detail-wrapper">
-        <code>
-            <b><code class="method">GET</code></b> /all/rawdata
-            <br/>
-            <b>Example:</b> http://atlantacrimedataapi-env.eba-9qxqwmqj.us-east-2.elasticbeanstalk.com/all/rawdata
-        </code>
-    </div>
-    <div class="detail-wrapper">
-        <details>
-            <summary>Sample</summary>
-            <br/>
-    <textarea readonly rows="5" cols="100">
-[{"_id":"abcd9999ac",
-"offense_id":210480696,
-"rpt_date":"2021-02-18T00:00:00.000Z",
-"occur_date":"1922-02-17T00:00:00.000Z",
-"occur_day":"Friday",
-"occur_day_num":6,
-"occur_time":"10:32",
-"poss_date":"2021-02-17T00:00:00.000Z",
-"poss_time":"10:32",
-"beat":103,"zone":1,
-"location":"1825 MACARTHUR BLVD NW\nATLANTA, GA 30318\nUNITED STATES",
-"ibr_code":"23G","UC2_Literal":"LARCENY-FROM VEHICLE",
-"neighborhood":"Bolton",
-"npu":"D",
-"lat":33.81402,
-"long":-84.447583}, ...]
-    </textarea>        
-    </details>
-    </div>
-    <br/>
-    <p>To request all neighborhood names.</p>
-    <div class="detail-wrapper">
-        <code>
-            <b><code class="method">GET</code></b> /all/nbhd_names
-            <br/>
-            <b>Example: </b> http://atlantacrimedataapi-env.eba-9qxqwmqj.us-east-2.elasticbeanstalk.com/all/nbhd_names
-        </code>
-    </div>
-    <div class="detail-wrapper">
-        <details>
-            <summary>Sample</summary>
-            <br/>
-    <textarea readonly rows="5" cols="100">
-["Adair Park","Adams Park","Adamsville","Almond Park","Amal Heights","Ansley Park","Arden/Habersham","Ardmore","Argonne Forest","Arlington Estates","Ashley Courts","Ashview Heights","Atkins Park","Atlanta Industrial Park","Atlanta University Center","Atlantic Station","Audobon Forest","Audobon Forest West","Baker Hills","Bakers Ferry","Bankhead","Bankhead/Bolton", ...]
-    </textarea>    
-        </details>
-    </div>
-    <br/>
+        <h1>Hello!</h1>
+        <h1>Welcome to the Unofficial Atlanta Crime Data API</h1>
 
-    <h1>Top</h1>
-    <p>To request whole list of top incidents with neighborhood name.</p>
-    <div class="detail-wrapper">
-        <code>
-            <b><code class="method">GET</code></b> /top/nbhds
+        <br/>
+
+            <p>The data has been taken from the <a href="https://www.atlantapd.org/i-want-to/crime-data-downloads">Atlanta Police Department's</a> website.</p>
+            <p>Visit their website to see more intresting data.</p>
+
+        <br/>
+
+            <p class="code-p"><code class="code-block">Base url</code> :  <%= url%>/</p>
+
+        <br/>
+        <!-- -------------------------------------------General-------------------------------------------------- -->
+        <h1>General</h1>
+            <p>To download <a href="<%= url %>/download/csv">csv</a> file.</p>
+            <div class="detail-wrapper">
+                <code>
+                    <b><code class="method">GET</code></b> /download/csv
+                    <br/>
+                    <b>Example: </b> <%= url%>/download/csv
+                </code>
+            </div>
+        
+        <br/> 
+        <br/>
+        
+        <!-- -------------------------------------------Search-------------------------------------------------- -->
+        <h1>Search</h1>
+            <p>Search querie's with many options.</p>
+            <div class="detail-wrapper">
+                <code>
+                    <b><code class="method">GET</code></b> /search?queries
+                    <br/>
+                    <b>Example: </b> <%= url%>/serach?limit=10&occur_day=Monday <a href="<%= url %>/search?limit=10&occur_day=Monday">&#8599;</a>
+                    <br/>
+                    <b>Note:</b> If nothing is provided inside the query string, then the status 400 will issued to the client.
+                </code>
+            </div>
             <br/>
-            <b>Example: </b> http://atlantacrimedataapi-env.eba-9qxqwmqj.us-east-2.elasticbeanstalk.com/top/nbhds
-        </code>
+            <table class="search-table">
+                <thead>
+                    <tr>
+                        <th>Type</th>
+                        <th>Description</th>
+                        <th>Accepted values</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>limit</td>
+                        <td>It limits the number of documents.</td>
+                        <td>[1 - 20,000]</td>
+                    </tr>
+                    <tr>
+                        <td>neighborhood</td>
+                        <td>Search by neighborhood names.</td>
+                        <td>Since there are so many neighborhood names, it's recommneded to use this <a href="<%= url %>/all/nbhd_names">link</a> to check its parameters.</td>
+                    </tr>
+                    <tr>
+                        <td>occur_day</td>
+                        <td>Search by occurrence day.</td>
+                        <td>[Sunday - Saturday]</td>
+                    </tr>
+                    <tr>
+                        <td>occur_day_number</td>
+                        <td>Search by occurrence day number.</td>
+                        <td>[1, 7] where, 1 = Sunday.</td>
+                    </tr>
+                    <tr>
+                        <td>zone</td>
+                        <td>Search by zone number.</td>
+                        <td>[1, 7]</td>
+                    </tr>
+                    <tr>
+                        <td>type</td>
+                        <td>Search by crime type.</td>
+                        <td>[AGG ASSAULT, AUTO THEFT, BURGLARY, HOMICIDE, LARCENY-FROM VEHICLE, LARCENY-NON VEHICLE, ROBBERY]</td>
+                    </tr>
+                </tbody>
+            </table>
+        <br/> 
+        <br/>
+        
+        <!-- -------------------------------------------All-------------------------------------------------- -->
+        <h1>All</h1>
+            <p>To request all raw json data.</p>
+            <div class="detail-wrapper">
+                <code>
+                    <b><code class="method">GET</code></b> /all/rawdata
+                    <br/>
+                    <b>Example:</b> <%= url%>/all/rawdata <a href="<%= url %>/all/rawdata">&#8599;</a>
+                </code>
+            </div>
+        
+        <br/>
+            
+            <p>To request all neighborhood names.</p>
+            <div class="detail-wrapper">
+                <code>
+                    <b><code class="method">GET</code></b> /all/nbhd_names
+                    <br/>
+                    <b>Example: </b> <%= url%>/all/nbhd_names <a href="<%= url %>/all/nbhd_names">&#8599;</a>
+                </code>
+            </div>
+        
+        <br/>
+        
+        <!-- -------------------------------------------Top-------------------------------------------------- -->
+        <h1>Top</h1>
+            <p>To request whole list of top incidents with neighborhood name.</p>
+        <div class="detail-wrapper">
+            <code>
+                <b><code class="method">GET</code></b> /top/nbhds
+                <br/>
+                <b>Example: </b> <%= url%>/top/nbhds <a href="<%= url %>/top/nbhds">&#8599;</a>
+            </code>
+        </div>
+        <br/>
+        <p>To request specific amount of top incidents with neighborhood name.</p>
+        <div class="detail-wrapper">
+            <code>
+                <b><code class="method">GET</code></b> /top/nbhds/-number-
+                <br/>
+                <b>Example: </b> <%= url%>/top/nbhds/2 <a href="<%= url %>/top/nbhds/2">&#8599;</a>
+            </code>
+        </div>
+        <br/>
+        
+        <!-- -------------------------------------------Footer-------------------------------------------------- -->
+        <footer>
+            <p>Have any suggestion(s) or would you like to contribute? <a href="https://github.com/Meet-forever">click me</a></p>
+            <p id="author">Made by Meet Patel</p>
+        </footer>
+        <br/>
     </div>
-    <div class="detail-wrapper">
-        <details>
-            <summary>Sample</summary>
-            <br/>
-    <textarea readonly rows="5" cols="100">
-[{"_id":"abcd123abc","Downtown":1472},
- {"_id":"abcd1234ab","Midtown":1331},
- {"_id":"abcd12345a","Old Fourth Ward":474},
- {"_id":"abcd123567","Lindbergh/Morosgo":450},...]
-    </textarea>    
-        </details>
-    </div>
-    <br/>
-    <p>To request specific amount of top incidents with neighborhood name.</p>
-    <div class="detail-wrapper">
-        <code>
-            <b><code class="method">GET</code></b> /top/nbhds/-number-
-            <br/>
-            <b>Example: </b> http://atlantacrimedataapi-env.eba-9qxqwmqj.us-east-2.elasticbeanstalk.com/top/nbhds/2
-        </code>
-    </div>
-    <div class="detail-wrapper">
-        <details>
-            <summary>Sample</summary>
-            <br/>
-    <textarea readonly rows="5" cols="100">
-[{"_id":"abcd123abc","Downtown":1472},
- {"_id":"abcd1234ab","Midtown":1331}]
-    </textarea>    
-        </details>
-    </div>
-    <br/>
-    <footer>
-        <p>Have any suggestion(s) or would you like to contribute? <a href="https://github.com/Meet-forever">click me</a></p>
-        <p id="author">Made by Meet Patel</p>
-    </footer>
-    <br/>
-</div>
 </body>
 </html>

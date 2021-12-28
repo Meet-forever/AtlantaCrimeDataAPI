@@ -5,6 +5,7 @@ const cors = require('cors');
 const PORT = process.env.PORT || 8000;
 const allData = require('./Routes/AllData')
 const top = require('./Routes/Top')
+const search = require('./Routes/Search')
 const path = require('path')
 const fs = require('fs');
 
@@ -15,6 +16,8 @@ app.use(cors({
 }))
 app.use(express.urlencoded({extended:true}))
 app.use(express.json())
+app.locals.url = "http://atlantacrimedataapi-env.eba-9qxqwmqj.us-east-2.elasticbeanstalk.com"
+// app.locals.url = "http://localhost:8000"
 
 /**
  * main function to run database 
@@ -26,11 +29,11 @@ async function main(){
     try{
         await client.connect();
         const db = client.db(`CrimeDataAPI`);
-
+        const databaseMaxSize = await db.collection('rawCrimeData').countDocuments();
         // To use ejs
         app.set('views', path.join(__dirname, 'views'));
         app.set('view engine', 'ejs');
-       
+    
         // Static file setup for css and images
         app.use(express.static(__dirname+'/public'))
 
@@ -40,7 +43,14 @@ async function main(){
             // const result = await col.find().sort({occur_date: -1}).toArray();
             res.render('index');
         })
-        
+
+        // Routes
+        app.use('/all', allData({db:db, db_size: databaseMaxSize}));
+        app.use('/top', top({db:db, db_size: databaseMaxSize}));
+        app.use('/search', search({db:db, db_size: databaseMaxSize}));
+        app.get('*', (req, res)=>{
+            res.render('404');
+        })
         app.get('/download/csv', (req, res)=>{
             let datafilepath = path_joinner(['ScriptPy', 'Data'])
             fs.readdir(datafilepath, (err, files) => {
@@ -48,7 +58,9 @@ async function main(){
                     let abspath = path.join(datafilepath, files[0]);   
                     fs.readFile(abspath, (err, data) => {
                         if (data) {
-                            res.header('Content-Type', 'text/csv');
+                            res.set({'Content-Type':'text/csv', 
+                                        'Content-Disposition': `attachment; filename=${files[0]}`
+                                        });
                             res.send(data);
                         }
                         else{
@@ -60,13 +72,6 @@ async function main(){
             })
         })
         
-        // Routes
-        app.use('/all', allData({db}));
-        app.use('/top', top({db}));
-        
-        app.get('*', (req, res)=>{
-            res.render('404');
-        })
 
         //Helper function
         const path_joinner = (arr) =>{
