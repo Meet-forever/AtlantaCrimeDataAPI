@@ -48,9 +48,6 @@ async function main(){
         app.use('/all', allData({db:db, db_size: databaseMaxSize}));
         app.use('/top', top({db:db, db_size: databaseMaxSize}));
         app.use('/search', search({db:db, db_size: databaseMaxSize}));
-        app.get('*', (req, res)=>{
-            res.render('404');
-        })
         app.get('/download/csv', (req, res)=>{
             let datafilepath = path_joinner(['ScriptPy', 'Data'])
             fs.readdir(datafilepath, (err, files) => {
@@ -58,20 +55,23 @@ async function main(){
                     let abspath = path.join(datafilepath, files[0]);   
                     fs.readFile(abspath, (err, data) => {
                         if (data) {
-                            res.set({'Content-Type':'text/csv', 
-                                        'Content-Disposition': `attachment; filename=${files[0]}`
-                                        });
-                            res.send(data);
-                        }
-                        else{
-                            res.status(500).send({'Error' : 'Failed to read the file.'});
-                        }
-                    })
-                }
-                else res.status(500).send({'Error' : 'Failed to get the file.'})
-            })
+                            res.header({'Content-Type':'text/csv', 
+                            'Content-Disposition': `attachment; filename=${files[0]}`
+                        });
+                        res.send(data);
+                    }
+                    else{
+                        res.status(500).send({'Error' : 'Failed to read the file.'});
+                    }
+                })
+            }
+            else res.status(500).send({'Error' : 'Failed to get the file.'})
         })
-        
+    })
+    
+    app.get('*', (req, res)=>{
+        res.render('404');
+    })
 
         //Helper function
         const path_joinner = (arr) =>{

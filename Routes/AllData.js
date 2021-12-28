@@ -9,11 +9,7 @@ const allData = (props) =>{
     router.get('/rawdata', async(req, res)=>{
         const col = db.collection('rawCrimeData')
         const {limit} = req.query
-            if(!limit || parseInt(limit) <= 0 || isNaN(parseInt(limit))){
-                res.status(400).render("404", {error_no: 400});
-                return;
-            }
-            const limitsize = (Number(limit) < db_size) ? parseInt(limit) : db_size;
+            const limitsize = (limit && (Number(limit)>0 && Number(limit) < db_size)) ? parseInt(limit) : db_size;
             const result = await col.aggregate([]).limit(limitsize).project({_id:0}).toArray();
             res.send(result);
         })
