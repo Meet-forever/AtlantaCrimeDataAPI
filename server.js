@@ -16,7 +16,7 @@ app.use(cors({
 }))
 app.use(express.urlencoded({extended:true}))
 app.use(express.json())
-app.locals.url = "http://atlantacrimedataapi-env.eba-9qxqwmqj.us-east-2.elasticbeanstalk.com"
+app.locals.url = "https://atlanta-crime-data-api.herokuapp.com/"
 // app.locals.url = "http://localhost:8000"
 
 /**
